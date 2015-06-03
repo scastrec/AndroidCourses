@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">HelloWorld</string>
+    <string name="your_text">Your text</string>
+    <string name="button">Send</string>
+    <string name="url_hello">http://37.187.158.128:50000/hello</string>
+</resources>
