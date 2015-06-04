@@ -26,8 +26,15 @@ In workshop 2 we created an tchat app where users have to click on refresh to ge
 Let's automated that.
 * TimerTask
 
-
 ## Workshop 3
+What about some design? 
+Let's play with Material Design
+* MaterialDesign
+* Android Support Libs
+* UI
+* RecyclerView - Cards -
+
+## Workshop 4
 Yeah, my tchat app works great on my smartphone. 
 Oh, wait!! Android is not only about smartphone. What if i want to optimize for tablette? 
 * Fragments
