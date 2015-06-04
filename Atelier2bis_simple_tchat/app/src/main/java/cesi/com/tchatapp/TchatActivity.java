@@ -120,7 +120,8 @@ public class TchatActivity extends ActionBarActivity {
 
         //start polling
         timer = new Timer();
-        timer.schedule(task, TIME_POLLING);
+        // first start in 500 ms, then update every TIME_POLLING
+        timer.schedule(task, 500, TIME_POLLING);
     }
 
     /**
