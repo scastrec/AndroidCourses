@@ -18,7 +18,14 @@ Time to connect to the web.
 Ping and HelloWorld are great, but I'd like to send messages to my colleague. 
 Let's improve previous project to send messages to my server.
 * HttpRequest and Json
-* ListView and RecycleListView
+* ListView 
+* menu
+
+## Workshop 2 bis
+In workshop 2 we created an tchat app where users have to click on refresh to get messages.
+Let's automated that.
+* TimerTask
+
 
 ## Workshop 3
 Yeah, my tchat app works great on my smartphone. 

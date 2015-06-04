@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -28,6 +29,8 @@ import org.apache.http.util.EntityUtils;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cesi.com.tchatapp.adapter.MessagesAdapter;
 import cesi.com.tchatapp.helper.JsonParser;
@@ -40,19 +43,62 @@ import cesi.com.tchatapp.utils.Constants;
  */
 public class TchatActivity extends ActionBarActivity {
 
+    private static final long TIME_POLLING = 2000;
     ListView listView;
     EditText msgToSend;
     MessagesAdapter adapter;
 
     String token;
 
+    List<Message> messages;
+
+    Timer timer;
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            try {
+                //then create an httpClient.
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                request.setURI(URI.create(TchatActivity.this.getString(R.string.url_msg)));
+                request.setHeader("token", token);
+                // do request.
+                HttpResponse httpResponse = client.execute(request);
+                String response = null;
+
+                //Store response
+                if (httpResponse.getEntity() != null) {
+                    response = EntityUtils.toString(httpResponse.getEntity());
+                }
+                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
+                        .getStatusLine()
+                        .getStatusCode());
+                if (httpResponse.getStatusLine().getStatusCode() != 200) {
+                    //error happened
+                }
+                messages = JsonParser.getMessages(response);
+                mHandler.obtainMessage(1).sendToTarget();
+            } catch (Exception e) {
+                Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
+            }
+
+        }
+    };
+
+    public Handler mHandler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            if (msg.what == 1) {
+                adapter.addMessage(messages);
+            }
+        }
+    };
 
     @Override
-    public void onCreate(Bundle savedInstance){
+    public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_tchat);
         token = this.getIntent().getExtras().getString(Constants.INTENT_TOKEN);
-        if(token == null){
+        if (token == null) {
             Toast.makeText(this, this.getString(R.string.error_no_token), Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -61,7 +107,7 @@ public class TchatActivity extends ActionBarActivity {
         findViewById(R.id.tchat_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(msgToSend.getText().toString().isEmpty()){
+                if (msgToSend.getText().toString().isEmpty()) {
                     msgToSend.setError(v.getContext().getString(R.string.error_missing_msg));
                     return;
                 }
@@ -71,31 +117,11 @@ public class TchatActivity extends ActionBarActivity {
         });
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
+
+        //start polling
+        timer = new Timer();
+        timer.schedule(task, TIME_POLLING);
     }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_tchat, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.tchat_refresh:
-                new GetMessagesAsyncTask(this).execute();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-
-
 
     /**
      * AsyncTask for sign-in
@@ -110,7 +136,7 @@ public class TchatActivity extends ActionBarActivity {
 
         @Override
         protected Integer doInBackground(String... params) {
-            if(!NetworkHelper.isInternetAvailable(context)){
+            if (!NetworkHelper.isInternetAvailable(context)) {
                 return null;
             }
 
@@ -141,68 +167,17 @@ public class TchatActivity extends ActionBarActivity {
                 return httpResponse
                         .getStatusLine()
                         .getStatusCode();
-            } catch (Exception e){
+            } catch (Exception e) {
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return null;
             }
         }
 
         @Override
-        public void onPostExecute(Integer status){
-            if(status != 200){
+        public void onPostExecute(Integer status) {
+            if (status != 200) {
                 Toast.makeText(context, context.getString(R.string.error_send_msg), Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    /**
-     * AsyncTask for sign-in
-     */
-    protected class GetMessagesAsyncTask extends AsyncTask<String, Void, List<Message>> {
-
-        Context context;
-
-        public GetMessagesAsyncTask(final Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected List<Message> doInBackground(String... params) {
-            if(!NetworkHelper.isInternetAvailable(context)){
-                return null;
-            }
-
-            try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(context.getString(R.string.url_msg)));
-                request.setHeader("token", token);
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
-
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if(httpResponse.getStatusLine().getStatusCode() != 200){
-                    //error happened
-                    return null;
-                }
-                return JsonParser.getMessages(response);
-            } catch (Exception e){
-                Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-                return null;
-            }
-        }
-
-        @Override
-        public void onPostExecute(final List<Message> msgs){
-            adapter.addMessage(msgs);
         }
     }
 }
