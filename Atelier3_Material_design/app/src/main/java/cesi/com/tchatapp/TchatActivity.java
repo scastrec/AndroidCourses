@@ -1,6 +1,5 @@
 package cesi.com.tchatapp;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,13 +10,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
@@ -45,11 +43,12 @@ import cesi.com.tchatapp.utils.Constants;
 /**
  * Created by sca on 02/06/15.
  */
-public class TchatActivity extends Activity {
+public class TchatActivity extends ActionBarActivity {
 
     private static final long TIME_POLLING = 2000;
     RecyclerView listView;
     EditText msgToSend;
+    FloatingActionButton fab;
     MessagesAdapter adapter;
 
     String token;
@@ -98,6 +97,7 @@ public class TchatActivity extends Activity {
     };
 
     private LinearLayoutManager mLayoutManager;
+    private Toolbar mToolbar;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -114,29 +114,21 @@ public class TchatActivity extends Activity {
         mLayoutManager = new LinearLayoutManager(this);
         listView.setLayoutManager(mLayoutManager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        mToolbar = (Toolbar) findViewById(R.id.tchat_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Todo display floating label
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show();
+                WriteMsgDialog.getInstance(token).show(TchatActivity.this.getFragmentManager(), "write");
+
             }
         });
 
-        /*msgToSend = (EditText) findViewById(R.id.tchat_msg);
-        findViewById(R.id.tchat_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (msgToSend.getText().toString().isEmpty()) {
-                    msgToSend.setError(v.getContext().getString(R.string.error_missing_msg));
-                    return;
-                }
-                new SendMessageAsyncTask(v.getContext()).execute(msgToSend.getText().toString());
-                msgToSend.setText("");
-            }
-        });*/
+        msgToSend = (EditText) findViewById(R.id.tchat_msg);
+
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
 
@@ -147,66 +139,32 @@ public class TchatActivity extends Activity {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         super.onPause();
         timer.cancel();
     }
 
-    /**
-     * AsyncTask for sign-in
-     */
-    protected class SendMessageAsyncTask extends AsyncTask<String, Void, Integer> {
-
-        Context context;
-
-        public SendMessageAsyncTask(final Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected Integer doInBackground(String... params) {
-            if (!NetworkHelper.isInternetAvailable(context)) {
-                return null;
-            }
-
-            try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(URI.create(context.getString(R.string.url_msg)));
-                request.setHeader("token", token);
-
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                pairs.add(new BasicNameValuePair("message", params[0]));
-                //set entity
-                request.setEntity(new UrlEncodedFormEntity(pairs));
-
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
-
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-
-                return httpResponse
-                        .getStatusLine()
-                        .getStatusCode();
-            } catch (Exception e) {
-                Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-                return null;
-            }
-        }
-
-        @Override
-        public void onPostExecute(Integer status) {
-            if (status != 200) {
-                Toast.makeText(context, context.getString(R.string.error_send_msg), Toast.LENGTH_SHORT).show();
-            }
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_tchat, menu);
+        return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.tchat_refresh) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

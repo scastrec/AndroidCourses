@@ -15,21 +15,37 @@
         android:orientation="vertical"
         android:gravity="center">
 
-      <EditText
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:inputType="textPersonName"
-          android:ems="10"
-          android:id="@+id/signin_username"
-          android:hint="@string/username_hint"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-      <EditText
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:inputType="textPassword"
-          android:ems="10"
-          android:id="@+id/signin_pwd"
-          android:hint="@string/pwd_hint"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/signin_username"
+                android:hint="@string/username_hint"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/signin_pwd"
+                android:hint="@string/pwd_hint"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+
+
 
       <Button
           android:layout_width="wrap_content"
