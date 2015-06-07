@@ -35,6 +35,14 @@ Let's play with Material Design
 * RecyclerView - Cards -
 
 ## Workshop 4
+Let's play with others UI view and add Users list
+* DrawerLayout
+* NavigationView
+* SwipeRefreshLayout
+* Tabs
+
+
+## Workshop 5
 Yeah, my tchat app works great on my smartphone. 
 Oh, wait!! Android is not only about smartphone. What if i want to optimize for tablette? 
 * Fragments
