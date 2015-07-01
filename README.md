@@ -35,7 +35,7 @@ Let's play with Material Design
 * RecyclerView - Cards -
 
 ## Workshop 4
-Let's play with others UI view and add Users list
+Let's play with Fragments and others UI view and add Users list
 * DrawerLayout
 * NavigationView
 * SwipeRefreshLayout
@@ -47,6 +47,14 @@ Yeah, my tchat app works great on my smartphone.
 Oh, wait!! Android is not only about smartphone. What if i want to optimize for tablette? 
 * Fragments
 * Advanced UI
+
+
+## Workshop 6
+Your app works great. But what about you go underground taking metro, or during a flight? 
+Need to supply an offline feature? 
+Let's play whith this
+* Preferences
+* SQLite
 
 ## More Workshop 
 GPS? Database? Advance Intent (mail, tweets, ...)? 

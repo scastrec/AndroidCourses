@@ -55,6 +55,15 @@ public class SigninActivity extends Activity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(username.getText().toString().isEmpty()){
+                    username.setError(SigninActivity.this.getString(R.string.error_missing_login));
+                    return;
+                }
+                if(pwd.getText().toString().isEmpty()){
+                    pwd.setError(SigninActivity.this.getString(R.string.error_missing_pwd));
+                    return;
+                }
+                loading(true);
                 new SigninAsyncTask(v.getContext()).execute();
             }
         });
@@ -72,9 +81,13 @@ public class SigninActivity extends Activity {
         if(loading){
             pg.setVisibility(View.VISIBLE);
             btn.setVisibility(View.INVISIBLE);
+            username.setEnabled(false);
+            pwd.setEnabled(false);
         } else {
             pg.setVisibility(View.INVISIBLE);
             btn.setVisibility(View.VISIBLE);
+            username.setEnabled(true);
+            pwd.setEnabled(true);
         }
     }
 
@@ -92,7 +105,7 @@ public class SigninActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
-                return "Internet not available";
+                return null;
             }
 
             try {
@@ -127,7 +140,7 @@ public class SigninActivity extends Activity {
                 return null;
             } catch (Exception e){
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-                return "an error occured";
+                return null;
             }
         }
 

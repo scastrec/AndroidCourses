@@ -23,4 +23,6 @@
     <string name="validate">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="disconnect">Disconnect</string>
+    <string name="error_missing_login">Missing login</string>
+    <string name="error_missing_pwd">Missing password</string>
 </resources>
