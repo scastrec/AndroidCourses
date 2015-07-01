@@ -1,12 +1,8 @@
 package cesi.com.tchatapp;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,24 +15,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cesi.com.tchatapp.adapter.MessagesAdapter;
+import cesi.com.tchatapp.WriteMsgDialog;
 import cesi.com.tchatapp.helper.JsonParser;
-import cesi.com.tchatapp.helper.NetworkHelper;
 import cesi.com.tchatapp.model.Message;
 import cesi.com.tchatapp.utils.Constants;
 

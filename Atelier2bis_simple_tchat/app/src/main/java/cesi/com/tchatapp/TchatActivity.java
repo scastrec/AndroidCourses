@@ -102,7 +102,6 @@ public class TchatActivity extends ActionBarActivity {
             Toast.makeText(this, this.getString(R.string.error_no_token), Toast.LENGTH_SHORT).show();
             finish();
         }
-        listView = (ListView) findViewById(R.id.tchat_list);
         msgToSend = (EditText) findViewById(R.id.tchat_msg);
         findViewById(R.id.tchat_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +114,8 @@ public class TchatActivity extends ActionBarActivity {
                 msgToSend.setText("");
             }
         });
+
+        listView = (ListView) findViewById(R.id.tchat_list);
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
 
