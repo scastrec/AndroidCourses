@@ -89,7 +89,7 @@ public class SigninActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
-                return "Internet not available";
+                return null;
             }
 
             try {
@@ -124,7 +124,7 @@ public class SigninActivity extends Activity {
                 return null;
             } catch (Exception e){
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-                return "an error occured";
+                return null;
             }
         }
 
