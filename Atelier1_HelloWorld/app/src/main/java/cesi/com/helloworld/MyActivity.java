@@ -78,16 +78,13 @@ public class MyActivity extends Activity{
 
         public HelloAsyncTask(final Context context){
             this.context = context;
-
         }
-
 
         @Override
         protected String doInBackground(String... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
                 return "Internet not available";
             }
-
             try {
                 //then create an httpClient.
                 HttpClient client = new DefaultHttpClient();
@@ -97,7 +94,6 @@ public class MyActivity extends Activity{
                 // do request.
                 HttpResponse httpResponse = client.execute(request);
                 String response = null;
-
                 //Store response
                 if (httpResponse.getEntity() != null) {
                     response = EntityUtils.toString(httpResponse.getEntity());
