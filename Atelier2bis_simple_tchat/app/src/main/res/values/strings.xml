@@ -4,9 +4,9 @@
     <string name="pwd_hint">Your password</string>
     <string name="connection">Connection</string>
 
-    <string name="url_signin">http://37.187.158.128:50000/signin</string>
-    <string name="url_signup">http://37.187.158.128:50000/signup</string>
-    <string name="url_msg" >http://37.187.158.128:50000/messages</string>
+    <string name="url_signin">http://cesi.cleverapps.io/signin</string>
+    <string name="url_signup">http://cesi.cleverapps.io/signup</string>
+    <string name="url_msg" >http://cesi.cleverapps.io/messages</string>
 
     <string name="error_login">Login failed. Please check your login and password</string>
     <string name="error_signup">Signup failed</string>
