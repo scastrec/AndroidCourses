@@ -2,6 +2,7 @@ package cesi.com.tchatapp.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,11 +70,11 @@ public class MessagesAdapter extends BaseAdapter {
             vh = (ViewHolder) convertView.getTag();
         }
         vh.username.setText(getItem(position).getUsername());
-        vh.message.setText(getItem(position).getMsg());
+        vh.message.setText(Html.fromHtml(getItem(position).getMsg()));
         try {
             vh.date.setText(DateHelper.getFormattedDate(getItem(position).getDate()));
         } catch (ParseException e) {
-            Log.e(Constants.TAG, "error parsing date",e);
+            Log.e(Constants.TAG, "error parsing date", e);
         }
 
         return convertView;

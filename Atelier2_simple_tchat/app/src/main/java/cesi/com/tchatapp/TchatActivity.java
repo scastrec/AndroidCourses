@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,12 +64,13 @@ public class TchatActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/html");
                 intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"horacio.gonzales@gmail.com"});
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Android");
                 intent.putExtra(Intent.EXTRA_TEXT, adapter.getItem(position).getMsg());
                 intent.setType("text/plain");
 
+                //Intent create chooser, creates a popin that displays available apps.
+                // Second param is this popin title
                 startActivity(Intent.createChooser(intent, "Send Email"));
             }
         });
