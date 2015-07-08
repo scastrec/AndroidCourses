@@ -16,7 +16,7 @@ import cesi.com.tchatapp.model.User;
 public class JsonParser {
 
     public static List<Message> getMessages(String json) throws JSONException {
-        List<Message> messages = new LinkedList<>();
+        List<Message> messages = new LinkedList<Message>();
         JSONArray array = new JSONArray(json);
         JSONObject obj;
         Message msg;
@@ -35,10 +35,25 @@ public class JsonParser {
 
     public static List<User> getUsers(String response) throws JSONException {
         JSONArray array = new JSONArray(response);
-        List<User> users = new LinkedList<>();
+        List<User> users = new LinkedList<User>();
         for(int i=0; i<array.length(); i++){
             users.add(new User(array.getString(i)));
         }
         return users;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

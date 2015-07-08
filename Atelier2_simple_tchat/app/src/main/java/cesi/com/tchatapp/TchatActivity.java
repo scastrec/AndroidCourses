@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.util.Log;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cesi.com.tchatapp.adapter.MessagesAdapter;
+import cesi.com.tchatapp.fragment.WriteMsgFragment;
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
 import cesi.com.tchatapp.model.Message;
@@ -44,7 +46,6 @@ import cesi.com.tchatapp.utils.Constants;
 public class TchatActivity extends ActionBarActivity {
 
     ListView listView;
-    EditText msgToSend;
     MessagesAdapter adapter;
 
     String token;
@@ -75,16 +76,11 @@ public class TchatActivity extends ActionBarActivity {
             }
         });
 
-        msgToSend = (EditText) findViewById(R.id.tchat_msg);
-        findViewById(R.id.tchat_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tchat_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(msgToSend.getText().toString().isEmpty()){
-                    msgToSend.setError(v.getContext().getString(R.string.error_missing_msg));
-                    return;
-                }
-                new SendMessageAsyncTask(v.getContext()).execute(msgToSend.getText().toString());
-                msgToSend.setText("");
+                WriteMsgFragment.getInstance(token).show(TchatActivity.this.getSupportFragmentManager(),
+                        WriteMsgFragment.class.toString());
             }
         });
         adapter = new MessagesAdapter(this);
@@ -116,63 +112,6 @@ public class TchatActivity extends ActionBarActivity {
 
 
 
-    /**
-     * AsyncTask for sign-in
-     */
-    protected class SendMessageAsyncTask extends AsyncTask<String, Void, Integer> {
-
-        Context context;
-
-        public SendMessageAsyncTask(final Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected Integer doInBackground(String... params) {
-            if(!NetworkHelper.isInternetAvailable(context)){
-                return null;
-            }
-
-            try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(URI.create(context.getString(R.string.url_msg)));
-                request.setHeader("token", token);
-
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                pairs.add(new BasicNameValuePair("message", params[0]));
-                //set entity
-                request.setEntity(new UrlEncodedFormEntity(pairs));
-
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
-
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-
-                return httpResponse
-                        .getStatusLine()
-                        .getStatusCode();
-            } catch (Exception e){
-                Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-                return null;
-            }
-        }
-
-        @Override
-        public void onPostExecute(Integer status){
-            if(status != 200){
-                Toast.makeText(context, context.getString(R.string.error_send_msg), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 
     /**
      * AsyncTask for sign-in

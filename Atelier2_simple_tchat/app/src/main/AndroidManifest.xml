@@ -16,8 +16,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/AppTheme"
+
             android:name=".SignupActivity"/>
         <activity
+            android:theme="@style/AppTheme"
             android:name=".TchatActivity"
             android:windowSoftInputMode="adjustResize"/>
     </application>

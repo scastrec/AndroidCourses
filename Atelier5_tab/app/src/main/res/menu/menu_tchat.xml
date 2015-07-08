@@ -10,4 +10,14 @@
         android:title="@string/disconnect"
         android:showAsAction="always"/>
 
+    <item android:id="@+id/tchat_users"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/disconnect"
+        android:showAsAction="always"/>
+
+    <item android:id="@+id/tchat_tchat"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/disconnect"
+        android:showAsAction="always"/>
+
 </menu>

@@ -2,6 +2,20 @@
 <items version="2" >
 
     <item
+        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-30887e5be3111a0d7da9d5285bad47abaa66e18b.jar" />
+    </item>
+    <item
+        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/design/22.2.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-29d3afe196c8ea75dc8567d435aad925e49b4950.jar" />
+    </item>
+    <item
         jar="/Users/sca/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -28,20 +42,6 @@
         revision="21.1.2"
         sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
         <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-6510c42225515399197bba5cd897baae61009dd4.jar" />
-    </item>
-    <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-30887e5be3111a0d7da9d5285bad47abaa66e18b.jar" />
-    </item>
-    <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/design/22.2.0/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-29d3afe196c8ea75dc8567d435aad925e49b4950.jar" />
     </item>
     <item
         jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.2.0/classes.jar"

@@ -83,6 +83,7 @@ public class WriteMsgDialog extends DialogFragment {
                 }
 
         );
+
         return builder.create();
     }
 

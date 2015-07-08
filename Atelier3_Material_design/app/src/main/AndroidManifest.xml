@@ -16,8 +16,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".UsersActivity"/>
+
+        <activity
             android:name=".SignupActivity"/>
         <activity
+            android:theme="@style/Theme.TchatApp"
             android:name=".TchatActivity"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

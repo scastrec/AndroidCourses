@@ -31,4 +31,13 @@ public class JsonParser {
     public static String getToken(String response) throws JSONException {
         return new JSONObject(response).optString("token");
     }
+
+    public static List<String> getUsers(String response) throws JSONException {
+        JSONArray array = new JSONArray(response);
+        List<String> users = new LinkedList<String>();
+        for(int i=0; i<array.length(); i++){
+            users.add(array.getString(i));
+        }
+        return users;
+    }
 }

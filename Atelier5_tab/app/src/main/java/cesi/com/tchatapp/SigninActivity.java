@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -41,11 +42,13 @@ public class SigninActivity extends Activity {
     EditText pwd;
     ProgressBar pg;
     Button btn;
+    View v;
 
     @Override
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_signin);
+        v = findViewById(R.id.layout);
         username = (EditText) findViewById(R.id.signin_username);
         pwd = (EditText) findViewById(R.id.signin_pwd);
         pg = (ProgressBar) findViewById(R.id.signin_pg);
@@ -139,7 +142,9 @@ public class SigninActivity extends Activity {
                 i.putExtra(Constants.INTENT_TOKEN, token);
                 startActivity(i);
             } else {
-                Toast.makeText(context, context.getString(R.string.error_login), Toast.LENGTH_LONG).show();
+                Snackbar.make(v,
+                        context.getString(R.string.error_login),
+                        Snackbar.LENGTH_LONG).show();
             }
         }
     }

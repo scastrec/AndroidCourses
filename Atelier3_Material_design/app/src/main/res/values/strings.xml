@@ -17,4 +17,7 @@
     <string name="url_signin">http://cesi.cleverapps.io/signin</string>
     <string name="url_signup">http://cesi.cleverapps.io/signup</string>
     <string name="url_msg" >http://cesi.cleverapps.io/messages</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="users">users</string>
+    <string name="url_users">http://cesi.cleverapps.io/users</string>
 </resources>

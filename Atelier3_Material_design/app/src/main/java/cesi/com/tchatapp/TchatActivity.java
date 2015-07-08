@@ -1,8 +1,14 @@
 package cesi.com.tchatapp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +34,7 @@ import java.util.TimerTask;
 import cesi.com.tchatapp.adapter.MessagesAdapter;
 import cesi.com.tchatapp.WriteMsgDialog;
 import cesi.com.tchatapp.helper.JsonParser;
+import cesi.com.tchatapp.helper.NetworkHelper;
 import cesi.com.tchatapp.model.Message;
 import cesi.com.tchatapp.utils.Constants;
 
@@ -36,9 +43,7 @@ import cesi.com.tchatapp.utils.Constants;
  */
 public class TchatActivity extends ActionBarActivity {
 
-    private static final long TIME_POLLING = 2000;
     RecyclerView listView;
-    EditText msgToSend;
     FloatingActionButton fab;
     MessagesAdapter adapter;
 
@@ -46,49 +51,9 @@ public class TchatActivity extends ActionBarActivity {
 
     List<Message> messages;
 
-    Timer timer;
-    TimerTask task = new TimerTask() {
-        @Override
-        public void run() {
-            try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(TchatActivity.this.getString(R.string.url_msg)));
-                request.setHeader("token", token);
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
-
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if (httpResponse.getStatusLine().getStatusCode() != 200) {
-                    //error happened
-                }
-                messages = JsonParser.getMessages(response);
-                mHandler.obtainMessage(1).sendToTarget();
-            } catch (Exception e) {
-                Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-            }
-
-        }
-    };
-
-    public Handler mHandler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            if (msg.what == 1) {
-                adapter.addMessage(messages);
-            }
-        }
-    };
-
     private LinearLayoutManager mLayoutManager;
     private Toolbar mToolbar;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     public void onCreate(Bundle savedInstance) {
@@ -113,48 +78,98 @@ public class TchatActivity extends ActionBarActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WriteMsgDialog.getInstance(token).show(TchatActivity.this.getFragmentManager(), "write");
+                WriteMsgDialog d = WriteMsgDialog.getInstance(token);
+                d.show(TchatActivity.this.getFragmentManager(), "write");
 
             }
         });
 
-        msgToSend = (EditText) findViewById(R.id.tchat_msg);
-
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
 
-        //start polling
-        timer = new Timer();
-        // first start in 500 ms, then update every TIME_POLLING
-        timer.schedule(task, 500, TIME_POLLING);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        timer.cancel();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tchat, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.tchat_refresh) {
-            return true;
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupNavigationView(navigationView);
         }
 
-        return super.onOptionsItemSelected(item);
+        new GetMessagesAsyncTask().execute();
+    }
+
+    /**
+     * setup drawer.
+     * @param navigationView
+     */
+    private void setupNavigationView(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        if(menuItem.getItemId() == R.id.tchat_disconnect){
+                            token = null;
+                            TchatActivity.this.finish();
+                        } if(menuItem.getItemId() == R.id.tchat_users){
+                            Intent i = new Intent(TchatActivity.this, UsersActivity.class);
+                                    i.putExtra(Constants.INTENT_TOKEN, token);
+                            startActivity(i);
+                        } else if(menuItem.getItemId() == R.id.tchat_tchat) {
+                            new GetMessagesAsyncTask().execute();
+                        } else {
+                            menuItem.setChecked(true);
+                            mDrawerLayout.closeDrawers();
+                        }
+                        return true;
+                    }
+                });
+    }
+
+    /**
+     * AsyncTask for sign-in
+     */
+    protected class GetMessagesAsyncTask extends AsyncTask<String, Void, List<Message>> {
+
+
+        @Override
+        protected List<Message> doInBackground(String... params) {
+            if(!NetworkHelper.isInternetAvailable(TchatActivity.this)){
+                return null;
+            }
+
+            try {
+                //then create an httpClient.
+                HttpClient client = new DefaultHttpClient();
+                HttpGet request = new HttpGet();
+                request.setURI(URI.create(TchatActivity.this.getString(R.string.url_msg)));
+                request.setHeader("token", token);
+                // do request.
+                HttpResponse httpResponse = client.execute(request);
+                String response = null;
+
+                //Store response
+                if (httpResponse.getEntity() != null) {
+                    response = EntityUtils.toString(httpResponse.getEntity());
+                }
+                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
+                        .getStatusLine()
+                        .getStatusCode());
+                if(httpResponse.getStatusLine().getStatusCode() != 200){
+                    //error happened
+                    return null;
+                }
+                return JsonParser.getMessages(response);
+            } catch (Exception e){
+                Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
+                return null;
+            }
+        }
+
+        @Override
+        public void onPostExecute(final List<Message> msgs){
+            if(msgs != null) {
+                adapter.addMessage(msgs);
+            }
+            //swipeLayout.setRefreshing(false);
+        }
     }
 
 

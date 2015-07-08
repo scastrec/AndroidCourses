@@ -14,4 +14,6 @@
     <string name="refresh">Refresh</string>
     <string name="register">Signup</string>
     <string name="error_no_token">No token. Can\'t display activity</string>
+    <string name="ok">ok</string>
+    <string name="cancel">Cancel</string>
 </resources>
