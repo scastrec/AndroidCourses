@@ -18,7 +18,8 @@
         <activity
             android:name=".SignupActivity"/>
         <activity
-            android:name=".TchatActivity"/>
+            android:name=".TchatActivity"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>

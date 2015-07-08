@@ -52,6 +52,7 @@ public class SigninActivity extends Activity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loading(true);
                 new SigninAsyncTask(v.getContext()).execute();
             }
         });

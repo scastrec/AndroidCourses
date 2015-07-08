@@ -3,6 +3,7 @@ package cesi.com.tchatapp;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -57,6 +59,20 @@ public class TchatActivity extends ActionBarActivity {
             finish();
         }
         listView = (ListView) findViewById(R.id.tchat_list);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/html");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"horacio.gonzales@gmail.com"});
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Android");
+                intent.putExtra(Intent.EXTRA_TEXT, adapter.getItem(position).getMsg());
+                intent.setType("text/plain");
+
+                startActivity(Intent.createChooser(intent, "Send Email"));
+            }
+        });
+
         msgToSend = (EditText) findViewById(R.id.tchat_msg);
         findViewById(R.id.tchat_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +87,7 @@ public class TchatActivity extends ActionBarActivity {
         });
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
+        listView.setEmptyView(findViewById(R.id.tchat_empty));
     }
 
 
@@ -202,6 +219,11 @@ public class TchatActivity extends ActionBarActivity {
 
         @Override
         public void onPostExecute(final List<Message> msgs){
+            int nb = 0;
+            if(msgs != null){
+                nb = msgs.size();
+            }
+            Toast.makeText(TchatActivity.this, "loaded nb messages: "+nb, Toast.LENGTH_LONG).show();
             adapter.addMessage(msgs);
         }
     }
