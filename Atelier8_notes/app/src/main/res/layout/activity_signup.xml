@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:padding="@dimen/card_padding"
+                                    android:layout_margin="@dimen/card_margin">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:gravity="center">
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:id="@+id/signup_username"
+        android:hint="@string/username_hint"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:id="@+id/signup_pwd"
+        android:hint="@string/pwd_hint"/>
+
+      <EditText
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:inputType="textUri"
+          android:ems="10"
+          android:singleLine="true"
+          android:imeOptions="actionGo"
+          android:id="@+id/signup_url"
+          android:hint="@string/url_photo"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/register"
+        android:id="@+id/signup_btn"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/signup_pg"
+        android:visibility="gone"/>
+
+  </LinearLayout>
+</android.support.v7.widget.CardView>
