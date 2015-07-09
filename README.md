@@ -56,6 +56,13 @@ Let's play whith this
 * Preferences
 * SQLite
 
+## Workshop 7
+Let's take a photo
+
+## Workshop 8
+Let's code a todo list shared between users.
+
+
 ## More Workshop 
 GPS? Database? Advance Intent (mail, tweets, ...)? 
 
