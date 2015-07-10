@@ -69,6 +69,7 @@ GPS? Database? Advance Intent (mail, tweets, ...)?
 ## Atelier Annexe : Webview
 My app is NOT available for iOS. Dear. What I'm gonna do? I have no experiences on iOs development. 
 Why not give a try to hybrid apps. You can do magical stuff too.
+Call java from JS and JS from Java.  
 * WebView
 * JavascriptInterface
 
