@@ -1,19 +1,23 @@
 package hello.cesi.com.projectwebview;
 
+import android.content.Context;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 
 public class MainActivity2Activity extends ActionBarActivity {
 
     WebView wv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +31,10 @@ public class MainActivity2Activity extends ActionBarActivity {
         wv.getSettings().setJavaScriptEnabled(true);
         wv.setWebChromeClient(new WebChromeClient());
         wv.loadUrl("file:///android_asset/www/page.html", null);
+
+        //enable javascript to call Java
+        wv.addJavascriptInterface(new MyJSInterface(this), "Android");
+
     }
 
 
@@ -52,5 +60,29 @@ public class MainActivity2Activity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public class MyJSInterface {
+
+        Context mContext;
+
+        /**
+         * Instantiate the interface and set the context
+         */
+        MyJSInterface(final Context c) {
+            mContext = c;
+        }
+
+        @JavascriptInterface
+        public void helloJava() {
+            runOnUiThread(new Runnable() {
+
+                public void run() {
+                    Toast.makeText(mContext, "I've been called from JS", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
     }
 }
