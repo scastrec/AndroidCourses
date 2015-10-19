@@ -106,14 +106,10 @@ public class TchatActivity extends ActionBarActivity {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         if(menuItem.getItemId() == R.id.tchat_disconnect){
-                            token = null;
-                            TchatActivity.this.finish();
+                            //TODO  Your turn
                         } if(menuItem.getItemId() == R.id.tchat_users){
-                            Intent i = new Intent(TchatActivity.this, UsersActivity.class);
-                                    i.putExtra(Constants.INTENT_TOKEN, token);
-                            startActivity(i);
+
                         } else if(menuItem.getItemId() == R.id.tchat_tchat) {
-                            new GetMessagesAsyncTask().execute();
                         } else {
                             menuItem.setChecked(true);
                             mDrawerLayout.closeDrawers();

@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -46,7 +47,10 @@ public class DrawerActivity extends AppCompatActivity {
             mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
             if (viewPager != null) {
-                setupViewPager(viewPager);
+                Adapter adapter = new Adapter(getSupportFragmentManager());
+                adapter.addFragment(new MessagesFragment(), "Messages");
+                adapter.addFragment(new UsersFragment(), "Users");
+                viewPager.setAdapter(adapter);
             }
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(viewPager);

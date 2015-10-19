@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
 import android.util.Log;
@@ -49,6 +50,7 @@ public class TchatActivity extends ActionBarActivity {
     MessagesAdapter adapter;
 
     String token;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -60,6 +62,7 @@ public class TchatActivity extends ActionBarActivity {
             Toast.makeText(this, this.getString(R.string.error_no_token), Toast.LENGTH_SHORT).show();
             finish();
         }
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         listView = (ListView) findViewById(R.id.tchat_list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -76,16 +79,22 @@ public class TchatActivity extends ActionBarActivity {
             }
         });
 
-        findViewById(R.id.tchat_fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                WriteMsgFragment.getInstance(token).show(TchatActivity.this.getSupportFragmentManager(),
-                        WriteMsgFragment.class.toString());
-            }
-        });
+
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
-        listView.setEmptyView(findViewById(R.id.tchat_empty));
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+        swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+    }
+
+    private void refresh() {
+        new GetMessagesAsyncTask(this).execute();
+        swipeRefreshLayout.setRefreshing(true);
     }
 
 

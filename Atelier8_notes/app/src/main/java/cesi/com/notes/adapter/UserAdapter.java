@@ -49,7 +49,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public void onBindViewHolder(UserAdapter.ViewHolder vh, int position) {
         vh.username.setText(users.get(position).getUsername());
         if(users.get(position).getUrlPhoto() != null) {
-            Picasso.with(context).load(users.get(position).getUrlPhoto()).resize(50, 50)
+            Picasso.with(context).load(users.get(position).getUrlPhoto())
+                    .resize(100, 100)
                     .centerCrop()
                     .error(R.drawable.ic_account_circle_black_48dp)
                     .into(vh.img);

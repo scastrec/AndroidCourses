@@ -1,18 +1,19 @@
 <resources>
-    <string name="app_name">TchatApp</string>
+    <string name="app_name">noteApp</string>
     <string name="username_hint">Your username</string>
     <string name="pwd_hint">Your password</string>
     <string name="connection">Connection</string>
     <string name="url_signin">http://cesi.cleverapps.io/signin</string>
     <string name="url_signup">http://cesi.cleverapps.io/signup</string>
     <string name="url_msg" >http://cesi.cleverapps.io/messages</string>
+    <string name="url_notes" >http://cesi.cleverapps.io/notes</string>
     <string name="url_users" >http://cesi.cleverapps.io/users</string>
 
 
     <string name="error_login">Login failed. Please check your login and password</string>
     <string name="error_signup">Signup failed</string>
-    <string name="tchat_message">Your message</string>
-    <string name="tchat">Messages</string>
+    <string name="note_message">Your Note</string>
+    <string name="note">Messages</string>
     <string name="users">Users</string>
 
     <string name="error_missing_msg">Missing message</string>
@@ -24,4 +25,5 @@
     <string name="validate">Ok</string>
     <string name="cancel">Cancel</string>
     <string name="disconnect">Disconnect</string>
+    <string name="url_photo">Url to a photo</string>
 </resources>

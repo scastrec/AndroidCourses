@@ -1,17 +1,14 @@
 package cesi.com.tchatapp;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +38,23 @@ public class DrawerActivity extends AppCompatActivity {
         ab.setHomeAsUpIndicator(R.mipmap.ic_launcher);
         ab.setDisplayHomeAsUpEnabled(true);
 */
+
+        ViewPager pager = (ViewPager) findViewById(R.id.viewpager);
+        if(pager != null){
+            Adapter adapter = new Adapter(getSupportFragmentManager());
+            adapter.addFragment(new MessagesFragment(), "Messages");
+            adapter.addFragment(new UsersFragment(), "Users");
+
+            pager.setAdapter(adapter);
+        }
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        if(null != tabLayout){
+            tabLayout.setupWithViewPager(pager);
+        }
+
+
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -48,10 +62,7 @@ public class DrawerActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -62,20 +73,9 @@ public class DrawerActivity extends AppCompatActivity {
             }
         });
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+
     }
 
-    /**
-     * Setup pager.
-     * @param viewPager
-     */
-    private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new MessagesFragment(), "Messages");
-        adapter.addFragment(new UsersFragment(), "Users");
-        viewPager.setAdapter(adapter);
-    }
 
     /**
      * setup drawer.
@@ -99,33 +99,33 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
 
-
     static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<Fragment>();
-        private final List<String> mFragmentTitles = new ArrayList<String>();
+
+        private final List<Fragment> fragments = new ArrayList<>();
+        private final List<String> fragmentTitle = new ArrayList<>();
 
         public Adapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
+        public void addFragment(Fragment fragment, String title){
+            fragments.add(fragment);
+            fragmentTitle.add(title);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return mFragments.get(position);
+            return fragments.get(position);
         }
 
         @Override
         public int getCount() {
-            return mFragments.size();
+            return fragments.size();
         }
 
         @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
+        public CharSequence getPageTitle(int position){
+            return fragmentTitle.get(position);
         }
     }
 }

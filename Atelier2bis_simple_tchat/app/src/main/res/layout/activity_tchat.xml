@@ -3,30 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_send"
-        android:id="@+id/tchat_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/tchat_msg"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/tchat_button"
-        android:layout_toStartOf="@+id/tchat_button"
-        android:hint="@string/tchat_message"/>
-
-    <ListView
-        android:layout_width="match_parent"
+    <fragment class="cesi.com.tchatapp.fragment.MessagesFragment"
+        android:id="@+id/tchat_fragment"
         android:layout_height="match_parent"
-        android:id="@+id/tchat_list"
-        android:layout_above="@+id/tchat_msg" />
+        android:layout_width="match_parent"/>
 
 </RelativeLayout>

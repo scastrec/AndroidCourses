@@ -113,7 +113,7 @@ public class WriteMsgDialog extends DialogFragment {
                 List<NameValuePair> pairs = new ArrayList<NameValuePair>();
                 pairs.add(new BasicNameValuePair("message", params[0]));
                 //set entity
-                request.setEntity(new UrlEncodedFormEntity(pairs));
+                request.setEntity(new UrlEncodedFormEntity(pairs, "UTF-8"));
 
                 // do request.
                 HttpResponse httpResponse = client.execute(request);

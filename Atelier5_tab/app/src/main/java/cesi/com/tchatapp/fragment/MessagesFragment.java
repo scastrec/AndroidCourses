@@ -23,6 +23,7 @@ import java.util.List;
 
 import cesi.com.tchatapp.R;
 import cesi.com.tchatapp.adapter.MessageAdapter;
+import cesi.com.tchatapp.database.messages.MessagesDAO;
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
 import cesi.com.tchatapp.model.Message;
@@ -117,7 +118,7 @@ public class MessagesFragment extends Fragment {
         @Override
         protected List<Message> doInBackground(String... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
-                return null;
+                return new MessagesDAO(MessagesFragment.this.getActivity()).readMessages();
             }
 
             try {
@@ -141,7 +142,10 @@ public class MessagesFragment extends Fragment {
                     //error happened
                     return null;
                 }
-                return JsonParser.getMessages(response);
+                List<Message> msgs =  JsonParser.getMessages(response);
+                new MessagesDAO(MessagesFragment.this.getActivity()).writeMessage(msgs);
+
+                return msgs;
             } catch (Exception e){
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return null;
