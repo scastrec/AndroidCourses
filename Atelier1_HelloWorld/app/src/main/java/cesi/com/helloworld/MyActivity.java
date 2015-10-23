@@ -11,14 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import java.net.URI;
-
 import cesi.com.helloworld.helper.NetworkHelper;
 
 /**
@@ -85,28 +77,7 @@ public class MyActivity extends Activity{
             if(!NetworkHelper.isInternetAvailable(context)){
                 return "Internet not available";
             }
-            try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(context.getString(R.string.url_hello)+"?name="+params[0]));
-
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-
-                Log.d("HelloWorld", "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                return response;
-            } catch (Exception e){
-                Log.d("HelloWorld", "Error occured in your AsyncTask : ", e);
-                return "an error occured";
-            }
+            return NetworkHelper.connect(params[0]);
         }
 
         @Override
