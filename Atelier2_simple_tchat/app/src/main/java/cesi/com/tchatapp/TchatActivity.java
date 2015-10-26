@@ -1,15 +1,11 @@
 package cesi.com.tchatapp;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,22 +16,14 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
-import java.net.URI;
-import java.util.ArrayList;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import cesi.com.tchatapp.adapter.MessagesAdapter;
-import cesi.com.tchatapp.fragment.WriteMsgFragment;
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
 import cesi.com.tchatapp.model.Message;
@@ -48,9 +36,10 @@ public class TchatActivity extends ActionBarActivity {
 
     ListView listView;
     MessagesAdapter adapter;
+    EditText msg;
 
     String token;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    //private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -62,7 +51,7 @@ public class TchatActivity extends ActionBarActivity {
             Toast.makeText(this, this.getString(R.string.error_no_token), Toast.LENGTH_SHORT).show();
             finish();
         }
-        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+        //swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         listView = (ListView) findViewById(R.id.tchat_list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -78,23 +67,35 @@ public class TchatActivity extends ActionBarActivity {
                 startActivity(Intent.createChooser(intent, "Send Email"));
             }
         });
+        msg = (EditText) findViewById(R.id.tchat_msg);
+        findViewById(R.id.tchat_send).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(msg.getText().toString().isEmpty()){
+                    msg.setText("Please add a message");
+                    return;
+                }
+                new SendMessageAsyncTask().execute(msg.getText().toString());
+                msg.setText("");
+            }
+        });
 
 
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 refresh();
             }
         });
-        swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+        swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);*/
     }
 
     private void refresh() {
         new GetMessagesAsyncTask(this).execute();
-        swipeRefreshLayout.setRefreshing(true);
+      //  swipeRefreshLayout.setRefreshing(true);
     }
 
 
@@ -118,9 +119,65 @@ public class TchatActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * AsyncTask for sign-in
+     */
+    protected class SendMessageAsyncTask extends AsyncTask<String, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            InputStream inputStream = null;
+
+            try {
+                URL url = new URL(TchatActivity.this.getString(R.string.url_msg));
+                Log.d("Calling URL", url.toString());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                //set authorization header
+                conn.setRequestProperty("token", token);
 
 
+                String urlParameters = "message="+params[0];
 
+
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+                // Starts the query
+                // Send post request
+                conn.setDoOutput(true);
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                wr.writeBytes(urlParameters);
+                wr.flush();
+                wr.close();
+
+                return conn.getResponseCode();
+
+            } catch (Exception e) {
+                Log.e("NetworkHelper", e.getMessage());
+                return null;
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        Log.e("NetworkHelper", e.getMessage());
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onPostExecute(Integer status) {
+            if (status != 200) {
+                Toast.makeText(TchatActivity.this, TchatActivity.this.getString(R.string.error_send_msg), Toast.LENGTH_SHORT).show();
+            }else {
+                //DO nothing
+            }
+        }
+    }
 
     /**
      * AsyncTask for sign-in
@@ -139,31 +196,47 @@ public class TchatActivity extends ActionBarActivity {
                 return null;
             }
 
-            try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(context.getString(R.string.url_msg)));
-                request.setHeader("token", token);
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
+            InputStream inputStream = null;
 
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
+            try {
+                URL url = new URL(context.getString(R.string.url_msg));
+                Log.d("Calling URL", url.toString());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+                conn.setReadTimeout(10000 /* milliseconds */);
+                conn.setConnectTimeout(15000 /* milliseconds */);
+                conn.setRequestMethod("GET");
+                conn.setDoInput(true);
+
+                //set authorization header
+                conn.setRequestProperty("token", token);
+
+
+                int response = conn.getResponseCode();
+                Log.d("TchatActivity", "The response code is: " + response);
+
+                inputStream = conn.getInputStream();
+                String contentAsString = null;
+                if(response == 200) {
+                    // Convert the InputStream into a string
+                    contentAsString = NetworkHelper.readIt(inputStream);
+                    return JsonParser.getMessages(contentAsString);
                 }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if(httpResponse.getStatusLine().getStatusCode() != 200){
-                    //error happened
-                    return null;
-                }
-                return JsonParser.getMessages(response);
-            } catch (Exception e){
-                Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return null;
+
+                // Makes sure that the InputStream is closed after the app is
+                // finished using it.
+            } catch (Exception e) {
+                Log.e("NetworkHelper", e.getMessage());
+                return null;
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        Log.e("NetworkHelper", e.getMessage());
+                    }
+                }
             }
         }
 
