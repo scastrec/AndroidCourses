@@ -44,7 +44,7 @@ public class MessagesAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Message getItem(int position) {
         return messages.get(position);
     }
 
