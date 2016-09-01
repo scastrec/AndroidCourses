@@ -12,19 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import java.net.URI;
 import java.util.List;
 
 import cesi.com.tchatapp.R;
 import cesi.com.tchatapp.adapter.MessageAdapter;
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
+import cesi.com.tchatapp.model.HttpResult;
 import cesi.com.tchatapp.model.Message;
 import cesi.com.tchatapp.session.Session;
 import cesi.com.tchatapp.utils.Constants;
@@ -121,27 +115,13 @@ public class MessagesFragment extends Fragment {
             }
 
             try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(context.getString(R.string.url_msg)));
-                request.setHeader("token", Session.token);
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
+                HttpResult result = NetworkHelper.doGet(context.getString(R.string.url_msg), null, Session.token);
 
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
+                if(result.code == 200) {
+                    // Convert the InputStream into a string
+                    return JsonParser.getMessages(result.json);
                 }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if(httpResponse.getStatusLine().getStatusCode() != 200){
-                    //error happened
-                    return null;
-                }
-                return JsonParser.getMessages(response);
+                return null;
             } catch (Exception e){
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return null;

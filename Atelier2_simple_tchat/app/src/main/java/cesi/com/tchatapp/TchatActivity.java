@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -21,11 +20,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cesi.com.tchatapp.adapter.MessagesAdapter;
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
+import cesi.com.tchatapp.model.HttpResult;
 import cesi.com.tchatapp.model.Message;
 import cesi.com.tchatapp.utils.Constants;
 
@@ -129,31 +131,11 @@ public class TchatActivity extends ActionBarActivity {
             InputStream inputStream = null;
 
             try {
-                URL url = new URL(TchatActivity.this.getString(R.string.url_msg));
-                Log.d("Calling URL", url.toString());
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                Map<String, String> p = new HashMap<>();
+                p.put("message", params[0]);
+                HttpResult result = NetworkHelper.doPost(TchatActivity.this.getString(R.string.url_msg), p, token);
 
-                //set authorization header
-                conn.setRequestProperty("token", token);
-
-
-                String urlParameters = "message="+params[0];
-
-
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                // Starts the query
-                // Send post request
-                conn.setDoOutput(true);
-                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-                wr.writeBytes(urlParameters);
-                wr.flush();
-                wr.close();
-
-                return conn.getResponseCode();
+                return result.code;
 
             } catch (Exception e) {
                 Log.e("NetworkHelper", e.getMessage());
@@ -182,7 +164,7 @@ public class TchatActivity extends ActionBarActivity {
     /**
      * AsyncTask for sign-in
      */
-    protected class GetMessagesAsyncTask extends AsyncTask<String, Void, List<Message>> {
+    protected class GetMessagesAsyncTask extends AsyncTask<Void, Void, List<Message>> {
 
         Context context;
 
@@ -191,7 +173,7 @@ public class TchatActivity extends ActionBarActivity {
         }
 
         @Override
-        protected List<Message> doInBackground(String... params) {
+        protected List<Message> doInBackground(Void... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
                 return null;
             }
@@ -199,28 +181,11 @@ public class TchatActivity extends ActionBarActivity {
             InputStream inputStream = null;
 
             try {
-                URL url = new URL(context.getString(R.string.url_msg));
-                Log.d("Calling URL", url.toString());
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                HttpResult result = NetworkHelper.doGet(context.getString(R.string.url_msg), null, token);
 
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-
-                //set authorization header
-                conn.setRequestProperty("token", token);
-
-
-                int response = conn.getResponseCode();
-                Log.d("TchatActivity", "The response code is: " + response);
-
-                inputStream = conn.getInputStream();
-                String contentAsString = null;
-                if(response == 200) {
+                if(result.code == 200) {
                     // Convert the InputStream into a string
-                    contentAsString = NetworkHelper.readIt(inputStream);
-                    return JsonParser.getMessages(contentAsString);
+                    return JsonParser.getMessages(result.json);
                 }
                 return null;
 

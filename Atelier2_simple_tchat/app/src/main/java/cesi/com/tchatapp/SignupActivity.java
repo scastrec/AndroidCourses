@@ -2,7 +2,6 @@ package cesi.com.tchatapp;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,27 +11,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
-import cesi.com.tchatapp.utils.Constants;
+import cesi.com.tchatapp.model.HttpResult;
 
 /**
  * Created by sca on 02/06/15.
@@ -89,46 +78,21 @@ public class SignupActivity extends Activity {
                 //error
                 return 404;
             }
-
-            InputStream inputStream = null;
-
             try {
-                URL url = new URL(context.getString(R.string.url_signup));
-                Log.d("Calling URL", url.toString());
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                String urlParameters = "username="+params[0]+"&pwd="+params[1];
+                Map<String, String> p = new HashMap<>();
+                p.put("username", params[0]);
+                p.put("pwd", params[1]);
 
+                HttpResult result = NetworkHelper.doPost(context.getString(R.string.url_signup), p, null);
 
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                // Starts the query
-                // Send post request
-                conn.setDoOutput(true);
-                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-                wr.writeBytes(urlParameters);
-                wr.flush();
-                wr.close();
-
-                return conn.getResponseCode();
-
+                return result.code;
 
                 // Makes sure that the InputStream is closed after the app is
                 // finished using it.
             } catch (Exception e) {
                 Log.e("NetworkHelper", e.getMessage());
                 return null;
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.e("NetworkHelper", e.getMessage());
-                    }
-                }
             }
         }
 

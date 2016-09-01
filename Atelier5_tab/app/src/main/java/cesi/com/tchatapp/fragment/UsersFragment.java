@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,21 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import java.net.URI;
 import java.util.List;
 
 import cesi.com.tchatapp.R;
-import cesi.com.tchatapp.adapter.MessageAdapter;
 import cesi.com.tchatapp.adapter.UserAdapter;
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
-import cesi.com.tchatapp.model.Message;
+import cesi.com.tchatapp.model.HttpResult;
 import cesi.com.tchatapp.model.User;
 import cesi.com.tchatapp.session.Session;
 import cesi.com.tchatapp.utils.Constants;
@@ -124,27 +115,13 @@ public class UsersFragment extends Fragment {
             }
 
             try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(context.getString(R.string.url_users)));
-                request.setHeader("token", Session.token);
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
+                HttpResult result = NetworkHelper.doGet(context.getString(R.string.url_users), null, Session.token);
 
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if (httpResponse.getStatusLine().getStatusCode() != 200) {
+                if(result.code != 200){
                     //error happened
                     return null;
                 }
-                return JsonParser.getUsers(response);
+                return JsonParser.getUsers(result.json);
             } catch (Exception e) {
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return null;

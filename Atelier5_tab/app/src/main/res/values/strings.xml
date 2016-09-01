@@ -26,4 +26,6 @@
     <string name="cancel">Cancel</string>
     <string name="disconnect">Disconnect</string>
     <string name="url_photo">Url to a photo</string>
+    <string name="tchat_message">Message</string>
+    <string name="tchat">Messages</string>
 </resources>

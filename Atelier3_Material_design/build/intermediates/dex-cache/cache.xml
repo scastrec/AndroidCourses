@@ -2,53 +2,67 @@
 <items version="2" >
 
     <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/classes.jar"
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/libs/internal_impl-24.1.1.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-30887e5be3111a0d7da9d5285bad47abaa66e18b.jar" />
+        sha1="f78c2f395cb096f9dc1dc07e729922b8fcd3c4f5">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/internal_impl-24.1.1-f11d7f7fd8df6bda898bfabacfd8f5aa11ef59a0.jar" />
     </item>
     <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/design/22.2.0/classes.jar"
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.1.1/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-29d3afe196c8ea75dc8567d435aad925e49b4950.jar" />
+        sha1="c936c1bd42f0c018c18920c7bec619ef056b24f8">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-2b3ee5023ebbfa815137acca37034ce5d5ed654c.jar" />
     </item>
     <item
-        jar="/Users/sca/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/24.1.1/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-a3b86be31a57dbc2705aafced5d82a693bed0296.jar" />
+        sha1="787871951412550519b0222aba3c9df4cea49875">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-0fdabbe63854aa24b5d4fc769cba0f613e266dce.jar" />
     </item>
     <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/classes.jar"
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/support-v4/24.1.1/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-68e4b92f0bee50d6c9338d659e1aa495a0fc7609.jar" />
+        sha1="6d7d803871e3203465f71a163e7af104f807b446">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-eb9793b670947b23bd6c1633524d33e5b02ffd25.jar" />
     </item>
     <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/classes.jar"
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/24.1.1/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-92185749a5801c195f1e8d11b2aa8d24af6df6f6.jar" />
+        sha1="1256c10604bb098490eab070d76754ac5ceab35c">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-21145e47211b5fc44255f3742d7c6f540bb0ac6e.jar" />
     </item>
     <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/libs/internal_impl-22.2.0.jar"
+        jar="/Users/sca/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/24.1.1/3af19f153122737b372622fa6c81dd11a1c6b999/support-annotations-24.1.1.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-6510c42225515399197bba5cd897baae61009dd4.jar" />
+        sha1="3af19f153122737b372622fa6c81dd11a1c6b999">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/support-annotations-24.1.1-b3c933a8ecfe286ee1dce33e0f4398f5c376f9da.jar" />
     </item>
     <item
-        jar="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.2.0/classes.jar"
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.1.1/classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
-        <dex dex="/opt/workspace_cesi/AndroidCesi/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-1fcbae59a66b39b8c3ab84095af540dfb57d78cd.jar" />
+        sha1="f62e763609f65e47dc6c498760a4accf02776788">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-43fb1a133521e822550c32aab83a9f3ee7c685bf.jar" />
+    </item>
+    <item
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/cardview-v7/24.1.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4add8aa95c9f4e9a2ad64b7e2bf08e97e28955c1">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-a39601a80ea43f37f395112d449d301dcf9fbabf.jar" />
+    </item>
+    <item
+        jar="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/exploded-aar/com.android.support/design/24.1.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e195bd694d5389acfba27ff4fdfa64c4c65b2c05">
+        <dex dex="/opt/workspace_cesi/AndroidCourses/Atelier3_Material_design/app/build/intermediates/pre-dexed/debug/classes-2625b9e09341129646efa75d5aed1b1f6e4e419f.jar" />
     </item>
 
 </items>

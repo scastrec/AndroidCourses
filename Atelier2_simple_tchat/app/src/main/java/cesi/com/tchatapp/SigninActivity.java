@@ -11,30 +11,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
+import cesi.com.tchatapp.model.HttpResult;
 import cesi.com.tchatapp.utils.Constants;
 
 /**
@@ -105,37 +90,18 @@ public class SigninActivity extends Activity {
             InputStream inputStream = null;
 
             try {
-                URL url = new URL(context.getString(R.string.url_signin));
-                Log.d("Calling URL", url.toString());
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-                String urlParameters = "username="+params[0]+"&pwd="+params[1];
+                Map<String, String> p = new HashMap<>();
+                p.put("username", params[0]);
+                p.put("pwd", params[1]);
 
+                HttpResult result = NetworkHelper.doPost(context.getString(R.string.url_signin), p, null);
 
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                // Starts the query
-                // Send post request
-                conn.setDoOutput(true);
-                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-                wr.writeBytes(urlParameters);
-                wr.flush();
-                wr.close();
-
-                int response = conn.getResponseCode();
-                Log.d("NetworkHelper", "The response code is: " + response);
-
-                inputStream = conn.getInputStream();
-                String contentAsString = null;
-                if(response == 200) {
+                if(result.code == 200) {
                     // Convert the InputStream into a string
-                    contentAsString = NetworkHelper.readIt(inputStream);
-                    return JsonParser.getToken(contentAsString);
+                    return JsonParser.getToken(result.json);
                 }
-                return contentAsString;
+                return null;
 
                 // Makes sure that the InputStream is closed after the app is
                 // finished using it.

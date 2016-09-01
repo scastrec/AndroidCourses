@@ -21,13 +21,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cesi.com.tchatapp.adapter.MessagesAdapter;
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
+import cesi.com.tchatapp.model.HttpResult;
 import cesi.com.tchatapp.model.Message;
 import cesi.com.tchatapp.utils.Constants;
 
@@ -157,31 +160,11 @@ public class TchatActivity extends ActionBarActivity {
             InputStream inputStream = null;
 
             try {
-                URL url = new URL(TchatActivity.this.getString(R.string.url_msg));
-                Log.d("Calling URL", url.toString());
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                Map<String, String> p = new HashMap<>();
+                p.put("message", params[0]);
+                HttpResult result = NetworkHelper.doPost(TchatActivity.this.getString(R.string.url_msg), p, token);
 
-                //set authorization header
-                conn.setRequestProperty("token", token);
-
-
-                String urlParameters = "message="+params[0];
-
-
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-                // Starts the query
-                // Send post request
-                conn.setDoOutput(true);
-                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-                wr.writeBytes(urlParameters);
-                wr.flush();
-                wr.close();
-
-                return conn.getResponseCode();
+                return result.code;
 
             } catch (Exception e) {
                 Log.e("NetworkHelper", e.getMessage());
@@ -227,28 +210,11 @@ public class TchatActivity extends ActionBarActivity {
             InputStream inputStream = null;
 
             try {
-                URL url = new URL(context.getString(R.string.url_msg));
-                Log.d("Calling URL", url.toString());
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                HttpResult result = NetworkHelper.doGet(context.getString(R.string.url_msg), null, token);
 
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-
-                //set authorization header
-                conn.setRequestProperty("token", token);
-
-
-                int response = conn.getResponseCode();
-                Log.d("TchatActivity", "The response code is: " + response);
-
-                inputStream = conn.getInputStream();
-                String contentAsString = null;
-                if(response == 200) {
+                if(result.code == 200) {
                     // Convert the InputStream into a string
-                    contentAsString = NetworkHelper.readIt(inputStream);
-                    return JsonParser.getMessages(contentAsString);
+                    return JsonParser.getMessages(result.json);
                 }
                 return null;
 
