@@ -35,7 +35,7 @@ public class MyActivity extends Activity{
             public void onClick(View v) {
                 //do my request
                 displayProgressDialog();
-                new HelloAsyncTask(v.getContext()).execute(editText.getText().toString());
+                new HelloAsyncTask().execute(editText.getText().toString());
             }
         });
 
@@ -66,15 +66,9 @@ public class MyActivity extends Activity{
 
     public class HelloAsyncTask extends AsyncTask<String, Void, String>{
 
-        Context context;
-
-        public HelloAsyncTask(final Context context){
-            this.context = context;
-        }
-
         @Override
         protected String doInBackground(String... params) {
-            if(!NetworkHelper.isInternetAvailable(context)){
+            if(!NetworkHelper.isInternetAvailable(MyActivity.this)){
                 return "Internet not available";
             }
             return NetworkHelper.connect(params[0]);

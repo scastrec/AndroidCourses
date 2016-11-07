@@ -1,10 +1,13 @@
 package cesi.com.tchatapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +37,11 @@ import cesi.com.tchatapp.utils.Constants;
 /**
  * Created by sca on 02/06/15.
  */
-public class TchatActivity extends ActionBarActivity {
+public class TchatActivity extends Activity {
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     ListView listView;
     MessagesAdapter adapter;
@@ -98,6 +105,11 @@ public class TchatActivity extends ActionBarActivity {
     private void refresh() {
         new GetMessagesAsyncTask(this).execute();
       //  swipeRefreshLayout.setRefreshing(true);
+    }
+
+    public void onResume(){
+        super.onResume();
+        refresh();
     }
 
 

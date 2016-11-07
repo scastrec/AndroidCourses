@@ -59,7 +59,8 @@ public class WriteMsgDialog extends DialogFragment {
                         closeKeyboard();
                         if (!message.getText().toString().isEmpty()) {
                             //post message
-                            new SendMessageAsyncTask(view.getContext()).execute(message.getText().toString());
+                            new SendMessageAsyncTask(view.getContext())
+                                    .execute(message.getText().toString());
                         } else {
                             message.setError(WriteMsgDialog.this.getActivity()
                                     .getString(R.string.error_missing_msg));

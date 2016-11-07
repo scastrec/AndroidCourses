@@ -29,8 +29,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //let's go to other activity
-                Intent intent = new Intent(v.getContext(), SecondActivity.class);
-                intent.putExtra("VALUE", text.getText());
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                intent.putExtra("VALUE", "Salut Youhou");
                 startActivity(intent);
             }
         });

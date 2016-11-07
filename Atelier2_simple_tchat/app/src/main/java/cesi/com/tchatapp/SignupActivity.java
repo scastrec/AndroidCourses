@@ -64,7 +64,7 @@ public class SignupActivity extends Activity {
     /**
      * AsyncTask for sign-in
      */
-    protected class SignupAsyncTask extends AsyncTask<String, Void, Integer> {
+    protected class SignupAsyncTask extends AsyncTask<String, Void, HttpResult> {
 
         Context context;
 
@@ -73,7 +73,7 @@ public class SignupActivity extends Activity {
         }
 
         @Override
-        protected Integer doInBackground(String... params) {
+        protected HttpResult doInBackground(String... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
                 //error
                 return 404;
@@ -86,7 +86,7 @@ public class SignupActivity extends Activity {
 
                 HttpResult result = NetworkHelper.doPost(context.getString(R.string.url_signup), p, null);
 
-                return result.code;
+                return result;
 
                 // Makes sure that the InputStream is closed after the app is
                 // finished using it.
@@ -97,9 +97,9 @@ public class SignupActivity extends Activity {
         }
 
         @Override
-        public void onPostExecute(final Integer response){
+        public void onPostExecute(final HttpResult response){
             loading(false);
-            if(response == 200){
+            if(response.code == 200){
                 SignupActivity.this.finish();
             } else {
                 Toast.makeText(context, context.getString(R.string.error_signup), Toast.LENGTH_LONG).show();
