@@ -76,7 +76,7 @@ public class SignupActivity extends Activity {
         protected HttpResult doInBackground(String... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
                 //error
-                return 404;
+                return new HttpResult(500, null);
             }
             try {
 
