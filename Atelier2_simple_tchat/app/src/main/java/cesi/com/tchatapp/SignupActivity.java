@@ -46,7 +46,7 @@ public class SignupActivity extends Activity {
             @Override
             public void onClick(View v) {
                 loading(true);
-                new SignupAsyncTask(v.getContext()).execute(username.getText().toString(), pwd.getText().toString());
+                new SignupAsyncTask().execute(username.getText().toString(), pwd.getText().toString());
             }
         });
     }
@@ -66,15 +66,9 @@ public class SignupActivity extends Activity {
      */
     protected class SignupAsyncTask extends AsyncTask<String, Void, HttpResult> {
 
-        Context context;
-
-        public SignupAsyncTask(final Context context) {
-            this.context = context;
-        }
-
         @Override
         protected HttpResult doInBackground(String... params) {
-            if(!NetworkHelper.isInternetAvailable(context)){
+            if(!NetworkHelper.isInternetAvailable(SignupActivity.this)){
                 //error
                 return new HttpResult(500, null);
             }
@@ -84,7 +78,8 @@ public class SignupActivity extends Activity {
                 p.put("username", params[0]);
                 p.put("pwd", params[1]);
 
-                HttpResult result = NetworkHelper.doPost(context.getString(R.string.url_signup), p, null);
+                HttpResult result = NetworkHelper.doPost(
+                        SignupActivity.this.getString(R.string.url_signup), p, null);
 
                 return result;
 
@@ -102,7 +97,9 @@ public class SignupActivity extends Activity {
             if(response.code == 200){
                 SignupActivity.this.finish();
             } else {
-                Toast.makeText(context, context.getString(R.string.error_signup), Toast.LENGTH_LONG).show();
+                Toast.makeText(SignupActivity.this,
+                        SignupActivity.this.getString(R.string.error_signup),
+                        Toast.LENGTH_LONG).show();
             }
         }
     }
