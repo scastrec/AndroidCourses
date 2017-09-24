@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -13,7 +14,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     Button button;
-    TextView text;
+    EditText text;
 
     @Override
     public void onCreate(final Bundle savedInstance){
@@ -21,7 +22,7 @@ public class MainActivity extends Activity {
         //set the view for this activity
         setContentView(R.layout.mainactivity);
         //Get the UI from the view
-        text = (TextView) findViewById(R.id.my_text);
+        text = (EditText) findViewById(R.id.my_text);
         button = (Button) findViewById(R.id.my_button);
 
         //add an action on click button
@@ -30,7 +31,7 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 //let's go to other activity
                 Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                intent.putExtra("VALUE", "Salut Youhou");
+                intent.putExtra("VALUE", text.getText().toString());
                 startActivity(intent);
             }
         });
