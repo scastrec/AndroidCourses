@@ -130,8 +130,6 @@ public class TchatActivity extends ActionBarActivity {
                 return null;
             }
 
-            InputStream inputStream = null;
-
             try {
                 HttpResult result = NetworkHelper.doGet(context.getString(R.string.url_msg), null, token);
 
@@ -146,14 +144,6 @@ public class TchatActivity extends ActionBarActivity {
             } catch (Exception e) {
                 Log.e("NetworkHelper", e.getMessage());
                 return null;
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.e("NetworkHelper", e.getMessage());
-                    }
-                }
             }
         }
 
