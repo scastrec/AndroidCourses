@@ -14,19 +14,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cesi.com.notes.R;
+import cesi.com.notes.helper.NetworkHelper;
+import cesi.com.notes.model.HttpResult;
 import cesi.com.notes.utils.Constants;
 
 /**
@@ -104,27 +100,12 @@ public class WriteNotesDialog extends DialogFragment {
         @Override
         protected Integer doInBackground(String... params) {
             try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(URI.create(context.getString(R.string.url_notes)));
-                request.setHeader("token", getArguments().getString("token"));
 
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                pairs.add(new BasicNameValuePair("note", params[0]));
-                //set entity
-                request.setEntity(new UrlEncodedFormEntity(pairs));
+                Map<String, String> p = new HashMap<>();
+                p.put("message", params[0]);
+                HttpResult result = NetworkHelper.doPost(context.getString(R.string.url_notes), p, getArguments().getString("token"));
 
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-
-                return httpResponse
-                        .getStatusLine()
-                        .getStatusCode();
+                return result.code;
             } catch (Exception e) {
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return 500;

@@ -11,20 +11,11 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import cesi.com.notes.helper.NetworkHelper;
+import cesi.com.notes.model.HttpResult;
 import cesi.com.notes.utils.Constants;
 
 /**
@@ -52,7 +43,7 @@ public class SignupActivity extends Activity {
             @Override
             public void onClick(View v) {
                 loading(true);
-                new SignupAsyncTask(v.getContext()).execute();
+                new SignupAsyncTask(v.getContext()).execute(username.getText().toString(), pwd.getText().toString());
             }
         });
     }
@@ -70,7 +61,7 @@ public class SignupActivity extends Activity {
     /**
      * AsyncTask for sign-in
      */
-    protected class SignupAsyncTask extends AsyncTask<Void, Void, String> {
+    protected class SignupAsyncTask extends AsyncTask<String, Void, Integer> {
 
         Context context;
 
@@ -79,50 +70,30 @@ public class SignupActivity extends Activity {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Integer doInBackground(String... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
-                return "Internet not available";
+                return 500;
             }
 
             try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(URI.create(context.getString(R.string.url_signup)));
 
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                pairs.add(new BasicNameValuePair("username", username.getText().toString()));
-                pairs.add(new BasicNameValuePair("pwd", pwd.getText().toString()));
-                pairs.add(new BasicNameValuePair("urlPhoto", url.getText().toString()));
-                //set entity
-                request.setEntity(new UrlEncodedFormEntity(pairs));
+                Map<String, String> p = new HashMap<>();
+                p.put("username", params[0]);
+                p.put("pwd", params[1]);
 
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
+                HttpResult result = NetworkHelper.doPost(context.getString(R.string.url_signup), p, null);
 
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if(httpResponse.getStatusLine().getStatusCode() != 200){
-                    //error happened
-                    return null;
-                }
-                return response;
+                return result.code;
             } catch (Exception e){
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-                return "an error occured";
+                return 500;
             }
         }
 
         @Override
-        public void onPostExecute(final String token){
+        public void onPostExecute(final Integer code){
             loading(false);
-            if(token != null){
+            if(code == 200){
                 SignupActivity.this.finish();
             } else {
                 Toast.makeText(context, context.getString(R.string.error_signup), Toast.LENGTH_LONG).show();

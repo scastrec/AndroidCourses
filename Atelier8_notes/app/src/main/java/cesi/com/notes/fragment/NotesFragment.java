@@ -15,24 +15,17 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cesi.com.notes.R;
 import cesi.com.notes.adapter.NotesAdapter;
 import cesi.com.notes.helper.JsonParser;
 import cesi.com.notes.helper.NetworkHelper;
+import cesi.com.notes.model.HttpResult;
 import cesi.com.notes.model.Note;
 import cesi.com.notes.session.Session;
 import cesi.com.notes.utils.Constants;
@@ -133,27 +126,14 @@ public class NotesFragment extends Fragment {
                 return null;
             }
             try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(URI.create(NotesFragment.this.getString(R.string.url_notes_update, id)));
-                request.setHeader("token", Session.token);
+                Map<String, String> p = new HashMap<>();
+                p.put("done", params[0].toString());
+                HttpResult result = NetworkHelper.doPost(NotesFragment.this.getString(R.string.url_notes_update, id), p, getArguments().getString("token"));
 
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                pairs.add(new BasicNameValuePair("done", params[0].toString()));
-                //set entity
-                request.setEntity(new UrlEncodedFormEntity(pairs));
 
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
+                Log.d(Constants.TAG, "received for url: note update - return code: " + result.code);
 
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-
-                return httpResponse
-                        .getStatusLine()
-                        .getStatusCode();
+                return result.code;
             } catch (Exception e) {
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return 500;
@@ -190,27 +170,14 @@ public class NotesFragment extends Fragment {
             }
 
             try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpGet request = new HttpGet();
-                request.setURI(URI.create(context.getString(R.string.url_notes)));
-                request.setHeader("token", Session.token);
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
+                Map<String, String> p = new HashMap<>();
+                HttpResult result = NetworkHelper.doPost(NotesFragment.this.getString(R.string.url_notes), p, getArguments().getString("token"));
 
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if(httpResponse.getStatusLine().getStatusCode() != 200){
+                if(result.code != 200){
                     //error happened
                     return null;
                 }
-                return JsonParser.getNotes(response);
+                return JsonParser.getNotes(result.json);
             } catch (Exception e){
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
                 return null;

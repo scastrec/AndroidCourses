@@ -85,7 +85,7 @@ public class SignupActivity extends Activity {
                 return result.code;
             } catch (Exception e){
                 Log.d(Constants.TAG, "Error occured in your AsyncTask : ", e);
-                return 200;
+                return 500;
             }
         }
 

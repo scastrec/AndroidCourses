@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn"
         android:src="@android:drawable/ic_menu_camera"/>
-    
+
     <ImageView
         android:layout_width="300dip"
         android:layout_height="300dip"
