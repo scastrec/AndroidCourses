@@ -46,7 +46,8 @@ public class SignupActivity extends Activity {
             @Override
             public void onClick(View v) {
                 loading(true);
-                new SignupAsyncTask().execute(username.getText().toString(), pwd.getText().toString());
+                new SignupAsyncTask().execute(
+                        username.getText().toString(), pwd.getText().toString());
             }
         });
     }
@@ -94,7 +95,7 @@ public class SignupActivity extends Activity {
         @Override
         public void onPostExecute(final HttpResult response){
             loading(false);
-            if(response.code == 200){
+            if(response != null && response.code == 200){
                 SignupActivity.this.finish();
             } else {
                 Toast.makeText(SignupActivity.this,

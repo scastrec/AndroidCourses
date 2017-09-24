@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -86,9 +87,6 @@ public class SigninActivity extends Activity {
                 return null;
             }
 
-            // Un stream pour récevoir la réponse
-            InputStream inputStream = null;
-
             try {
 
                 Map<String, String> p = new HashMap<>();
@@ -108,14 +106,6 @@ public class SigninActivity extends Activity {
             } catch (Exception e) {
                 Log.e("NetworkHelper", e.getMessage());
                 return null;
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.e("NetworkHelper", e.getMessage());
-                    }
-                }
             }
         }
 
@@ -127,12 +117,7 @@ public class SigninActivity extends Activity {
                 i.putExtra(Constants.INTENT_TOKEN, token);
                 startActivity(i);
             } else {
-                Snackbar.make(v, context.getString(R.string.error_login), Snackbar.LENGTH_LONG).setAction("btn", new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                    }
-                }).show();
+                Toast.makeText(SigninActivity.this, "Error login", Toast.LENGTH_SHORT).show();
             }
         }
     }

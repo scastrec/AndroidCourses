@@ -62,26 +62,13 @@ public class TchatActivity extends Activity {
         }
         //swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.swiperefresh);
         listView = (ListView) findViewById(R.id.tchat_list);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"horacio.gonzales@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Android");
-                intent.putExtra(Intent.EXTRA_TEXT, adapter.getItem(position).getMsg());
-                intent.setType("text/plain");
 
-                //Intent create chooser, creates a popin that displays available apps.
-                // Second param is this popin title
-                startActivity(Intent.createChooser(intent, "Send Email"));
-            }
-        });
         msg = (EditText) findViewById(R.id.tchat_msg);
         findViewById(R.id.tchat_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(msg.getText().toString().isEmpty()){
-                    msg.setText("Please add a message");
+                    msg.setError("Please add a message");
                     return;
                 }
                 new SendMessageAsyncTask().execute(msg.getText().toString());
@@ -92,14 +79,6 @@ public class TchatActivity extends Activity {
 
         adapter = new MessagesAdapter(this);
         listView.setAdapter(adapter);
-
-        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
-        swipeRefreshLayout.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);*/
     }
 
     private void refresh() {
@@ -107,31 +86,12 @@ public class TchatActivity extends Activity {
       //  swipeRefreshLayout.setRefreshing(true);
     }
 
+    @Override
     public void onResume(){
         super.onResume();
         refresh();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_tchat, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.tchat_refresh:
-                new GetMessagesAsyncTask(this).execute();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 
     /**
      * AsyncTask for sign-in
@@ -140,8 +100,6 @@ public class TchatActivity extends Activity {
 
         @Override
         protected Integer doInBackground(String... params) {
-            InputStream inputStream = null;
-
             try {
                 Map<String, String> p = new HashMap<>();
                 p.put("message", params[0]);
@@ -152,14 +110,6 @@ public class TchatActivity extends Activity {
             } catch (Exception e) {
                 Log.e("NetworkHelper", e.getMessage());
                 return null;
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.e("NetworkHelper", e.getMessage());
-                    }
-                }
             }
         }
 
@@ -190,8 +140,6 @@ public class TchatActivity extends Activity {
                 return null;
             }
 
-            InputStream inputStream = null;
-
             try {
                 HttpResult result = NetworkHelper.doGet(context.getString(R.string.url_msg), null, token);
 
@@ -206,14 +154,6 @@ public class TchatActivity extends Activity {
             } catch (Exception e) {
                 Log.e("NetworkHelper", e.getMessage());
                 return null;
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        Log.e("NetworkHelper", e.getMessage());
-                    }
-                }
             }
         }
 
