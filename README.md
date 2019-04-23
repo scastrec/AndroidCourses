@@ -1,5 +1,8 @@
 # AndroidCesi
-Android app for the CESI formation
+Android app for the CESI 
+
+NB : Android > 8, dasn AndroidManifest > application >
+`android:usesCleartextTraffic="true"`
 
 ## Workshop 0 
 Let's play with the basics:
