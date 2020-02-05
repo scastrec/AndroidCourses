@@ -16,12 +16,13 @@ public class JsonParser {
 
     public static List<Message> getMessages(String json) throws JSONException {
         List<Message> messages = new LinkedList<>();
-        JSONArray array = new JSONArray(json);
+        JSONObject main = new JSONObject(json);
+        JSONArray array = main.optJSONArray("messages");
         JSONObject obj;
         Message msg;
         for(int i=0; i < array.length(); i++){
             obj = array.getJSONObject(i);
-            msg = new Message(obj.optString("username"), obj.optString("message"), obj.optLong("date"));
+            msg = new Message(obj.optString("username"), obj.optString("message"), obj.optLong("ts"));
            messages.add(msg);
         }
 
@@ -29,6 +30,6 @@ public class JsonParser {
     }
 
     public static String getToken(String response) throws JSONException {
-        return new JSONObject(response).optString("token");
+        return new JSONObject(response).optString("jwt");
     }
 }

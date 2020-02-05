@@ -16,27 +16,32 @@ public class JsonParser {
 
     public static List<Message> getMessages(String json) throws JSONException {
         List<Message> messages = new LinkedList<>();
-        JSONArray array = new JSONArray(json);
+        JSONObject main = new JSONObject(json);
+        JSONArray array = main.optJSONArray("messages");
         JSONObject obj;
         Message msg;
         for(int i=0; i < array.length(); i++){
             obj = array.getJSONObject(i);
-            msg = new Message(obj.optString("username"), obj.optString("message"), obj.optLong("date"));
-           messages.add(msg);
+            msg = new Message(obj.optString("username"), obj.optString("message"), obj.optLong("ts"));
+            messages.add(msg);
         }
 
         return messages;
     }
 
     public static String getToken(String response) throws JSONException {
-        return new JSONObject(response).optString("token");
+        return new JSONObject(response).optString("jwt");
     }
 
+
     public static List<String> getUsers(String response) throws JSONException {
-        JSONArray array = new JSONArray(response);
+        JSONObject main = new JSONObject(response);
+        JSONArray array = main.optJSONArray("users");
         List<String> users = new LinkedList<String>();
+        JSONObject obj;
         for(int i=0; i<array.length(); i++){
-            users.add(array.getString(i));
+            obj = array.getJSONObject(i);
+            users.add(obj.optString("username"));
         }
         return users;
     }

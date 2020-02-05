@@ -73,7 +73,7 @@ public class NetworkHelper {
 
             if(token != null) {
                 //set authorization header
-                conn.setRequestProperty("token", token);
+                conn.setRequestProperty("Authorization", "Bearer " + token);
             }
 
             // Starts the query
@@ -132,7 +132,7 @@ public class NetworkHelper {
 
             if(token != null) {
                 //set authorization header
-                conn.setRequestProperty("token", token);
+                conn.setRequestProperty("Authorization", "Bearer " + token);
             }
 
             OutputStream os = conn.getOutputStream();

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import cesi.com.helloworld.helper.NetworkHelper;
 
@@ -77,6 +78,7 @@ public class MyActivity extends Activity{
         @Override
         protected void onPostExecute(final String s) {
             hideProgressDialog();
+            Toast.makeText(MyActivity.this, "Response : " + s, Toast.LENGTH_LONG).show();
             textView.setText(s);
         }
     }

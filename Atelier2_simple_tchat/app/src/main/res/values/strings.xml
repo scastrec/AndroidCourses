@@ -3,13 +3,13 @@
     <string name="username_hint">Your username</string>
     <string name="pwd_hint">Your password</string>
     <string name="connection">Connection</string>
-    <string name="url_signin">http://cesi.cleverapps.io/signin</string>
-    <string name="url_signup">http://cesi.cleverapps.io/signup</string>
+    <string name="url_signin">https://suoqix3gpa.execute-api.eu-west-3.amazonaws.com/dev/signin</string>
+    <string name="url_signup">https://suoqix3gpa.execute-api.eu-west-3.amazonaws.com/dev/signup</string>
     <string name="error_login">Login failed. Please check your login and password</string>
     <string name="error_signup">Signup failed</string>
     <string name="tchat_message">Your message</string>
     <string name="error_missing_msg">Missing message</string>
-    <string name="url_msg" >http://cesi.cleverapps.io/messages</string>
+    <string name="url_msg" >https://suoqix3gpa.execute-api.eu-west-3.amazonaws.com/dev/messages</string>
     <string name="error_send_msg">Error sending message</string>
     <string name="refresh">Refresh</string>
     <string name="register">Signup</string>

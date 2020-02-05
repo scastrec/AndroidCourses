@@ -12,21 +12,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
-
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cesi.com.tchatapp.helper.JsonParser;
 import cesi.com.tchatapp.helper.NetworkHelper;
+import cesi.com.tchatapp.model.HttpResult;
 import cesi.com.tchatapp.session.Session;
 import cesi.com.tchatapp.utils.Constants;
 import cesi.com.tchatapp.utils.PreferenceHelper;
@@ -62,7 +56,7 @@ public class SigninActivity extends Activity {
                     return;
                 }
                 loading(true);
-                new SigninAsyncTask(v.getContext()).execute();
+                new SigninAsyncTask(v.getContext()).execute(username.getText().toString(), pwd.getText().toString());
             }
         });
         findViewById(R.id.signin_register).setOnClickListener(new View.OnClickListener() {
@@ -92,7 +86,7 @@ public class SigninActivity extends Activity {
     /**
      * AsyncTask for sign-in
      */
-    protected class SigninAsyncTask extends AsyncTask<Void, Void, String>{
+    protected class SigninAsyncTask extends AsyncTask<String, Void, String>{
 
         Context context;
 
@@ -101,39 +95,22 @@ public class SigninActivity extends Activity {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(String... params) {
             if(!NetworkHelper.isInternetAvailable(context)){
                 return null;
             }
 
             try {
-                //then create an httpClient.
-                HttpClient client = new DefaultHttpClient();
-                HttpPost request = new HttpPost();
-                request.setURI(URI.create(context.getString(R.string.url_signin)));
 
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-                pairs.add(new BasicNameValuePair("username", username.getText().toString()));
-                pairs.add(new BasicNameValuePair("pwd", pwd.getText().toString()));
-                //set entity
-                request.setEntity(new UrlEncodedFormEntity(pairs));
+                Map<String, String> p = new HashMap<>();
+                p.put("username", params[0]);
+                p.put("pwd", params[1]);
 
-                // do request.
-                HttpResponse httpResponse = client.execute(request);
-                String response = null;
+                HttpResult result = NetworkHelper.doPost(context.getString(R.string.url_signin), p, null);
 
-                //Store response
-                if (httpResponse.getEntity() != null) {
-                    response = EntityUtils.toString(httpResponse.getEntity());
-                }
-
-                Log.d(Constants.TAG, "received for url: " + request.getURI() + " return code: " + httpResponse
-                        .getStatusLine()
-                        .getStatusCode());
-                if(httpResponse
-                        .getStatusLine()
-                        .getStatusCode() == 200) {
-                    return JsonParser.getToken(response);
+                if(result.code == 200) {
+                    // Convert the InputStream into a string
+                    return JsonParser.getToken(result.json);
                 }
                 return null;
             } catch (Exception e){

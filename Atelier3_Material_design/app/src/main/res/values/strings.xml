@@ -14,10 +14,10 @@
     <string name="settings">Settings</string>
     <string name="validate">Ok</string>
     <string name="cancel">Cancel</string>
-    <string name="url_signin">http://cesi.cleverapps.io/signin</string>
-    <string name="url_signup">http://cesi.cleverapps.io/signup</string>
-    <string name="url_msg" >http://cesi.cleverapps.io/messages</string>
+    <string name="url_signin">https://suoqix3gpa.execute-api.eu-west-3.amazonaws.com/dev/signin</string>
+    <string name="url_signup">https://suoqix3gpa.execute-api.eu-west-3.amazonaws.com/dev/signup</string>
+    <string name="url_msg" >https://suoqix3gpa.execute-api.eu-west-3.amazonaws.com/dev/messages</string>
     <string name="disconnect">Disconnect</string>
     <string name="users">users</string>
-    <string name="url_users">http://cesi.cleverapps.io/users</string>
+    <string name="url_users">https://suoqix3gpa.execute-api.eu-west-3.amazonaws.com/dev/users</string>
 </resources>
